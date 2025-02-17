@@ -1,3 +1,4 @@
+# Importing Imp Libraries.
 import streamlit as st
 from langchain_community.document_loaders import PDFPlumberLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
@@ -6,6 +7,8 @@ from langchain_ollama import OllamaEmbeddings
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_ollama.llms import OllamaLLM
 
+# CSS Code-This creates a cohesive dark theme with cyberpunk-inspired accents (#00FFAA), improved contrast, and better visual separation between different UI elements.
+# CyberPunk UI Style
 st.markdown("""
     <style>
     .stApp {
@@ -64,25 +67,33 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
+# You write Prompts here
 PROMPT_TEMPLATE = """
-You are an expert Research Assistant.You are expert in Extracting Contents from a Research Paper Use the provided context to answer the query. 
-If unsure, state that you don't know. Be concise and factual (max 5 sentences).
+[Expert researcher persona]
+[Specialization: Technical paper analysis]
+[Response constraints: 5 sentences, no speculation]
 
 Query: {user_query} 
 Context: {document_context} 
+
+[Input structure: Query + Context]
 Answer:
 """
-PDF_STORAGE_PATH = 'document_store/pdfs/'
-EMBEDDING_MODEL = OllamaEmbeddings(model="deepseek-r1:1.5b")
-DOCUMENT_VECTOR_DB = InMemoryVectorStore(EMBEDDING_MODEL)
+PDF_STORAGE_PATH = 'document_store/pdfs/'   # Local Storage Isolation
+EMBEDDING_MODEL = OllamaEmbeddings(model="deepseek-r1:1.5b")   #1.5B Param Technical Encoder
+DOCUMENT_VECTOR_DB = InMemoryVectorStore(EMBEDDING_MODEL)  # RAM-based Index
 LANGUAGE_MODEL = OllamaLLM(model="deepseek-r1:1.5b")
 
 import os
 from pathlib import Path
-def save_uploaded_file(uploaded_file):
+def save_uploaded_file(uploaded_file):      # Directs files to D:\document_store\pdfs
     # Use absolute path for D: drive storage
     save_dir = r"D:\document_store\pdfs"  # Raw string for Windows
-    Path(save_dir).mkdir(parents=True, exist_ok=True)  # Auto-create directories
+    Path(save_dir).mkdir(parents=True, exist_ok=True)  # Auto-create directories- Auto-directory Creation: Creates nested folders if missing
+                                                        # Basic Sanitization:
+                                                         # Replaces spaces with underscores
+                                                          # Removes parentheses
+                                                           # Binary Write: Ensures proper PDF handling
     
     # Sanitize filename (remove spaces/parentheses)
     safe_name = uploaded_file.name.replace(" ", "_").replace("(", "").replace(")", "")
@@ -95,26 +106,28 @@ def save_uploaded_file(uploaded_file):
         file.write(uploaded_file.getbuffer())
     return file_path
 
-def load_pdf_documents(file_path):
+def load_pdf_documents(file_path):  #PDFPlumberLoader Characteristics:
+                                    #Text extraction with layout preservation, Table data recognition, Page-by-page content parsing
+                                  #Metadata retention
     document_loader = PDFPlumberLoader(file_path)
     return document_loader.load()
 
-def chunk_documents(raw_documents):
+def chunk_documents(raw_documents):   # Cuts Big Documents into Smaller Pieces.
     text_processor = RecursiveCharacterTextSplitter(
-        chunk_size=1000,
-        chunk_overlap=200,
-        add_start_index=True
+        chunk_size=1000,   # Size of eaach chunk.
+        chunk_overlap=200,  # Overlap allowed, to create sence between 2 chunks.
+        add_start_index=True  
     )
     return text_processor.split_documents(raw_documents)
 
-def index_documents(document_chunks):
+def index_documents(document_chunks):  # Takes these small chunks and store them into searchable databases.(Like putting books in shelves)
     DOCUMENT_VECTOR_DB.add_documents(document_chunks)
 
-def find_related_documents(query):
+def find_related_documents(query):  # When you ask questions, it searches database for similar questions.
     return DOCUMENT_VECTOR_DB.similarity_search(query)
 
-def generate_answer(user_query, context_documents):
-    context_text = "\n\n".join([doc.page_content for doc in context_documents])
+def generate_answer(user_query, context_documents):   # Generates ans
+    context_text = "\n\n".join([doc.page_content for doc in context_documents])  # Combines found text pieces.
     conversation_prompt = ChatPromptTemplate.from_template(PROMPT_TEMPLATE)
     response_chain = conversation_prompt | LANGUAGE_MODEL
     return response_chain.invoke({"user_query": user_query, "document_context": context_text})
@@ -123,8 +136,8 @@ def generate_answer(user_query, context_documents):
 # UI Configuration
 
 
-st.title("📘 DocuMind AI")
-st.markdown("### Your Intelligent Document Assistant")
+st.title("📘 Document(PDF) Extractor AI")
+st.markdown("### Your Intelligent Document Assistant, at your service Sir")
 st.markdown("---")
 
 # File Upload Section
