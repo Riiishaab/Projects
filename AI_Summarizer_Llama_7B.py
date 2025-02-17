@@ -11,61 +11,106 @@ from langchain_ollama.llms import OllamaLLM
 # CyberPunk UI Style
 st.markdown("""
     <style>
+    /* Core Cyberpunk Theme */
     .stApp {
-        background-color: #0E1117;
-        color: #FFFFFF;
-    }
-    
-    /* Chat Input Styling */
-    .stChatInput input {
-        background-color: #1E1E1E !important;
-        color: #FFFFFF !important;
-        border: 1px solid #3A3A3A !important;
-    }
-    
-    /* User Message Styling */
-    .stChatMessage[data-testid="stChatMessage"]:nth-child(odd) {
-        background-color: #1E1E1E !important;
-        border: 1px solid #3A3A3A !important;
-        color: #E0E0E0 !important;
-        border-radius: 10px;
-        padding: 15px;
-        margin: 10px 0;
-    }
-    
-    /* Assistant Message Styling */
-    .stChatMessage[data-testid="stChatMessage"]:nth-child(even) {
-        background-color: #2A2A2A !important;
-        border: 1px solid #404040 !important;
-        color: #F0F0F0 !important;
-        border-radius: 10px;
-        padding: 15px;
-        margin: 10px 0;
-    }
-    
-    /* Avatar Styling */
-    .stChatMessage .avatar {
-        background-color: #00FFAA !important;
-        color: #000000 !important;
-    }
-    
-    /* Text Color Fix */
-    .stChatMessage p, .stChatMessage div {
-        color: #FFFFFF !important;
-    }
-    
-    .stFileUploader {
-        background-color: #1E1E1E;
-        border: 1px solid #3A3A3A;
-        border-radius: 5px;
-        padding: 15px;
-    }
-    
-    h1, h2, h3 {
+        background: radial-gradient(circle at center, #0A0D12 0%, #000000 100%);
         color: #00FFAA !important;
+        font-family: 'Courier New', monospace !important;
+        background-image: 
+            linear-gradient(to bottom, rgba(0, 255, 170, 0.05) 1px, transparent 1px),
+            linear-gradient(to right, rgba(0, 255, 170, 0.05) 1px, transparent 1px);
+        background-size: 20px 20px;
+    }
+
+    /* Terminal Glow Effect */
+    .main ::selection {
+        background: #00FFAA;
+        color: #000000;
+    }
+
+    /* Animated Bot System */
+    .cyber-bot {
+        position: fixed;
+        bottom: -50px;
+        right: 20px;
+        width: 180px;
+        height: 240px;
+        z-index: 9999;
+        pointer-events: none;
+    }
+    
+    .bot-animation {
+        animation: botFloat 3s ease-in-out infinite;
+        background: url('https://i.ibb.co/RN7Fy4d/cyberbot-spritesheet.png') 0 0 no-repeat;
+        width: 180px;
+        height: 240px;
+        filter: drop-shadow(0 0 15px #00FFAA);
+    }
+
+    @keyframes botFloat {
+        0%, 100% { transform: translateY(0) rotate(-1deg); }
+        50% { transform: translateY(-20px) rotate(2deg); }
+    }
+
+    /* Data Textbook Animation */
+    .data-textbook {
+        position: fixed;
+        bottom: 100px;
+        right: 200px;
+        width: 100px;
+        height: 130px;
+        background: url('https://i.ibb.co/4YfL6ZP/data-book.png') center/contain no-repeat;
+        animation: bookGlow 2s ease-in-out infinite;
+        filter: hue-rotate(90deg);
+    }
+
+    @keyframes bookGlow {
+        0%, 100% { opacity: 0.8; transform: scale(1); }
+        50% { opacity: 1; transform: scale(1.05); }
+    }
+
+    /* Matrix Rain Overlay */
+    .matrix-rain {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        opacity: 0.1;
+        z-index: -1;
+        background: url('https://i.ibb.co/6BCct0K/matrix-rain.gif');
+    }
+
+    /* Enhanced Chat Interface */
+    .stChatInput input {
+        background: #001212 !important;
+        border: 2px solid #00FFAA !important;
+        color: #00FFAA !important;
+        border-radius: 5px !important;
+        font-family: 'Courier New' !important;
+    }
+
+    .stChatMessage {
+        border-left: 3px solid #00FFAA !important;
+        margin: 15px 0 !important;
+        padding: 15px !important;
+        background: linear-gradient(to right, #001515, #000000) !important;
+        box-shadow: 0 0 10px rgba(0, 255, 170, 0.2) !important;
+    }
+
+    /* Neon Header Effects */
+    h1, h2, h3 {
+        text-shadow: 0 0 10px #00FFAA;
+        animation: headerGlow 2s ease-in-out infinite;
+    }
+
+    @keyframes headerGlow {
+        0%, 100% { text-shadow: 0 0 10px #00FFAA; }
+        50% { text-shadow: 0 0 20px #00FFAA, 0 0 30px #00FFAA; }
     }
     </style>
-    """, unsafe_allow_html=True)
+""", unsafe_allow_html=True)
 
 # You write Prompts here
 PROMPT_TEMPLATE = """
