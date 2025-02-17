@@ -22,51 +22,49 @@ st.markdown("""
         background-size: 20px 20px;
     }
 
-    /* Terminal Glow Effect */
-    .main ::selection {
-        background: #00FFAA;
-        color: #000000;
-    }
-
-    /* Animated Bot System */
+    /* Animated Elements */
     .cyber-bot {
         position: fixed;
-        bottom: -50px;
-        right: 20px;
-        width: 180px;
-        height: 240px;
+        bottom: 20px;
+        right: 30px;
+        width: 220px;
+        height: 300px;
         z-index: 9999;
         pointer-events: none;
     }
-    
-    .bot-animation {
-        animation: botFloat 3s ease-in-out infinite;
-        background: url('https://i.ibb.co/RN7Fy4d/cyberbot-spritesheet.png') 0 0 no-repeat;
-        width: 180px;
-        height: 240px;
-        filter: drop-shadow(0 0 15px #00FFAA);
+
+    .bot-with-book {
+        animation: cyberFloat 3s ease-in-out infinite;
+        background: url('https://i.ibb.co/4d3qWzR/cyberbot-book-sprite.png') 0 0 no-repeat;
+        width: 220px;
+        height: 300px;
+        filter: drop-shadow(0 0 15px #00FFAA) hue-rotate(90deg);
     }
 
-    @keyframes botFloat {
-        0%, 100% { transform: translateY(0) rotate(-1deg); }
-        50% { transform: translateY(-20px) rotate(2deg); }
+    @keyframes cyberFloat {
+        0%, 100% { 
+            transform: translateY(0) rotate(-1deg) scaleX(-1);
+            background-position: 0 0;
+        }
+        50% { 
+            transform: translateY(-20px) rotate(2deg) scaleX(-1);
+            background-position: -440px 0;
+        }
     }
 
-    /* Data Textbook Animation */
-    .data-textbook {
-        position: fixed;
-        bottom: 100px;
-        right: 200px;
-        width: 100px;
-        height: 130px;
-        background: url('https://i.ibb.co/4YfL6ZP/data-book.png') center/contain no-repeat;
-        animation: bookGlow 2s ease-in-out infinite;
-        filter: hue-rotate(90deg);
+    .hologram-glow {
+        position: absolute;
+        width: 80px;
+        height: 100px;
+        background: rgba(0, 255, 170, 0.1);
+        border-radius: 5px;
+        animation: hologramPulse 2s ease-in-out infinite;
+        filter: blur(15px);
     }
 
-    @keyframes bookGlow {
-        0%, 100% { opacity: 0.8; transform: scale(1); }
-        50% { opacity: 1; transform: scale(1.05); }
+    @keyframes hologramPulse {
+        0%, 100% { opacity: 0.3; transform: scale(0.95); }
+        50% { opacity: 0.6; transform: scale(1.05); }
     }
 
     /* Matrix Rain Overlay */
@@ -82,7 +80,7 @@ st.markdown("""
         background: url('https://i.ibb.co/6BCct0K/matrix-rain.gif');
     }
 
-    /* Enhanced Chat Interface */
+    /* Chat Interface Enhancements */
     .stChatInput input {
         background: #001212 !important;
         border: 2px solid #00FFAA !important;
@@ -99,7 +97,7 @@ st.markdown("""
         box-shadow: 0 0 10px rgba(0, 255, 170, 0.2) !important;
     }
 
-    /* Neon Header Effects */
+    /* Neon Effects */
     h1, h2, h3 {
         text-shadow: 0 0 10px #00FFAA;
         animation: headerGlow 2s ease-in-out infinite;
@@ -109,9 +107,14 @@ st.markdown("""
         0%, 100% { text-shadow: 0 0 10px #00FFAA; }
         50% { text-shadow: 0 0 20px #00FFAA, 0 0 30px #00FFAA; }
     }
+
+    /* Terminal Selection Glow */
+    .main ::selection {
+        background: #00FFAA;
+        color: #000000;
+    }
     </style>
 """, unsafe_allow_html=True)
-
 # You write Prompts here
 PROMPT_TEMPLATE = """
 [Expert Summarizer]
