@@ -1,3 +1,0 @@
-setInterval(function() {
-    window.location.reload();
-}, 5000); // 5 secs
